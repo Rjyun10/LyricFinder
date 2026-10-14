@@ -1,0 +1,130 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #121214;
+    color: #e1e1e6;
+}
+
+.card, .modal-content, .form-control {
+    border-radius: 1rem !important;
+    border: 1px solid #29292e;
+    background-color: #202024;
+    color: #fff;
+}
+
+.form-control:focus {
+    background-color: #202024;
+    color: #fff;
+    border-color: #00b37e;
+    box-shadow: 0 0 0 0.25rem rgba(0, 179, 126, 0.25);
+}
+
+.input-group-lg {
+    background-color: #202024;
+    border-radius: 1rem;
+    border: 1px solid #29292e;
+    padding: 0.25rem;
+}
+
+.input-group-lg .form-control, .input-group-lg .input-group-text {
+    background-color: transparent !important;
+    border: none !important;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #00b37e;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #00875f;
+}
+
+.search-mode-tabs {
+    display: inline-flex;
+    background-color: #18181b;
+    border: 1px solid #29292e;
+    border-radius: 2rem;
+    padding: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-tab-btn {
+    background: transparent;
+    border: none;
+    color: #a1a1aa;
+    padding: 0.5rem 1.25rem;
+    border-radius: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.search-tab-btn.active {
+    background-color: #00b37e;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 179, 126, 0.3);
+}
+
+.song-card {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+    border-radius: 1rem !important;
+}
+
+.song-card:hover {
+    transform: translateY(-3px);
+    border-color: #00b37e;
+}
+
+pre#modalLyricsContent {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: 'Inter', sans-serif;
+    color: #e1e1e6;
+    background-color: #18181b !important;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-height: 450px;
+    overflow-y: auto;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.inspiration-card {
+    background: linear-gradient(135deg, #18181b 0%, #202024 100%);
+    border: 1px solid #00b37e33;
+    border-radius: 1rem;
+    padding: 1.25rem;
+}
+
+#toastContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1080;
+}
+
+.custom-toast {
+    background-color: #202024;
+    border: 1px solid #00b37e;
+    color: #fff;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    15% { opacity: 1; transform: translateY(0); }
+    85% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+}

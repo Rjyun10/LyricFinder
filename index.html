@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LyricFinder - Buscador de Letras & Inspiração</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+
+    <div id="toastContainer"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" href="#"><i class="fa-solid fa-music me-2"></i>LyricFinder</a>
+            <div class="d-flex align-items-center gap-2">
+                <button id="mySavedSongsBtn" class="btn btn-outline-success btn-sm rounded-pill px-3 d-none" data-bs-toggle="modal" data-bs-target="#savedSongsModal">
+                    <i class="fa-solid fa-bookmark me-1"></i> Minhas Músicas
+                </button>
+                <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#lgpdModal">
+                    <i class="fa-solid fa-shield-halved me-1"></i> LGPD & Termos
+                </button>
+                <div id="authContainer">
+                    <button class="btn btn-primary btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#authModal">
+                        <i class="fa-solid fa-user me-1"></i> Entrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9 text-center mb-5">
+                <h1 class="fw-bold mb-3">Encontre a letra perfeita</h1>
+                <p class="text-muted mb-4">Escolha o modo de busca e explore discografias ou faixas específicas.</p>
+                
+                <div class="search-mode-tabs">
+                    <button type="button" class="search-tab-btn active" id="modeArtistBtn" onclick="setSearchMode('artist')">
+                        <i class="fa-solid fa-user-music me-1"></i> Artista
+                    </button>
+                    <button type="button" class="search-tab-btn" id="modeSongBtn" onclick="setSearchMode('song')">
+                        <i class="fa-solid fa-compact-disc me-1"></i> Música
+                    </button>
+                </div>
+
+                <div class="input-group input-group-lg shadow-sm align-items-center px-2">
+                    <span class="input-group-text text-muted ps-3"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="searchInput" class="form-control shadow-none px-2" placeholder="Digite o nome do artista...">
+                    <button class="btn btn-primary px-4 m-1" type="button" id="searchBtn">Buscar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="row g-4 justify-content-center"></div>
+
+        <!-- Botão para carregar mais músicas -->
+        <div class="row mt-5 d-none" id="loadMoreContainer">
+            <div class="col-12 text-center">
+                <button class="btn btn-outline-success rounded-pill px-5 py-2 fw-semibold" id="loadMoreBtn">
+                    <i class="fa-solid fa-rotate-right me-2"></i>Carregar mais músicas
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Músicas Salvas -->
+    <div class="modal fade" id="savedSongsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content p-3 shadow-lg">
+                <div class="modal-header border-0">
+                    <div>
+                        <h3 class="fw-bold mb-1"><i class="fa-solid fa-bookmark text-success me-2"></i>Minhas Músicas Salvas</h3>
+                        <p class="text-muted small mb-0">Clique em qualquer música salva para levá-la à busca e ver sua letra completa.</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="savedSongsListContainer" class="row g-3">
+                        <div class="col-12 text-center text-muted py-4">
+                            <i class="fa-solid fa-spinner fa-spin fa-2x mb-2"></i>
+                            <p class="small">Carregando suas músicas salvas...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Logout Estilizado -->
+    <div class="modal fade" id="logoutConfirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content p-3 text-center shadow-lg">
+                <div class="modal-body py-4">
+                    <i class="fa-solid fa-right-from-bracket text-warning fs-1 mb-3"></i>
+                    <h5 class="fw-bold mb-2">Deseja sair da conta?</h5>
+                    <p class="text-muted small mb-4">Você precisará fazer login novamente para acessar e salvar suas músicas.</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger btn-sm rounded-pill px-4" id="confirmLogoutBtn">Confirmar Saída</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Letra / Detalhes & Inspiração -->
+    <div class="modal fade" id="songModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content p-3 shadow-lg">
+                <div class="modal-header border-0">
+                    <div>
+                        <h3 id="modalSongTitle" class="fw-bold mb-1">Título da Música</h3>
+                        <p id="modalArtistName" class="text-success mb-0">Artista</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="inspirationSection" class="inspiration-card mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="fw-bold text-success mb-0">
+                                <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Inspiração & História da Composição
+                            </h6>
+                            <span class="badge bg-warning text-dark" style="font-size: 0.65rem;">
+                                <i class="fa-solid fa-sparkles me-1"></i> Contexto da Letra
+                            </span>
+                        </div>
+                        <p id="modalInspirationText" class="mb-0 text-light opacity-75 small">Carregando análise e contexto criativo...</p>
+                    </div>
+
+                    <h5 class="fw-semibold mb-3"><i class="fa-solid fa-align-left me-2 text-success"></i>Letra Completa</h5>
+                    <pre id="modalLyricsContent">Carregando letra da internet...</pre>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-light rounded-pill px-4" id="copyLyricsBtn"><i class="fa-solid fa-copy me-1"></i> Copiar Letra</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4" id="saveSongBtn"><i class="fa-solid fa-bookmark me-1"></i> Salvar Música</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal LGPD Detalhado -->
+    <div class="modal fade" id="lgpdModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content p-4 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-success"><i class="fa-solid fa-shield-halved me-2"></i>Política de Privacidade, Termos & LGPD</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-muted small">
+                    <h6 class="fw-bold text-light mb-2">1. Coleta e Armazenamento de Dados (LGPD - Lei nº 13.709/2018)</h6>
+                    <p class="mb-3">Em conformidade com a LGPD, informamos que o <strong>LyricFinder</strong> respeita integralmente a privacidade do usuário.</p>
+                    <h6 class="fw-bold text-light mb-2">2. Autenticação e Dados de Usuários</h6>
+                    <p class="mb-0">A gestão de contas e favoritos utiliza a infraestrutura segura do Supabase Auth com criptografia de senhas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Autenticação Supabase -->
+    <div class="modal fade" id="authModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content p-4 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="authModalTitle">Entrar na Conta</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aviso visível antes de efetuar o login -->
+                    <div class="alert alert-secondary bg-dark border-secondary text-light small py-2 px-3 mb-3 rounded-3" role="alert">
+                        <i class="fa-solid fa-circle-info text-success me-1"></i> <strong>Aviso:</strong> A recuperação de senha está em desenvolvimento. Guarde sua senha com segurança!
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small">E-mail</label>
+                        <input type="email" id="authEmail" class="form-control" placeholder="seu@email.com" autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label small mb-0">Senha</label>
+                            <a href="#" id="forgotPasswordLink" class="text-success text-decoration-none" style="font-size: 0.75rem;">Esqueceu a senha?</a>
+                        </div>
+                        <input type="password" id="authPassword" class="form-control" placeholder="********" autocomplete="new-password">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-primary" id="supabaseLoginBtn">Entrar</button>
+                        <button type="button" class="btn btn-outline-light btn-sm rounded-pill" id="supabaseSignupBtn">Criar Conta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Bootstrap, Supabase e Script Principal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
